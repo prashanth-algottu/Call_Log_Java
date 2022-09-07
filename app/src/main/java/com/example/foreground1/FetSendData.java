@@ -31,6 +31,7 @@ public class FetSendData{
     public String str_call_time;
     public String str_call_time_formatted;
     public String str_call_duration;
+    public SimpleDateFormat sd;
 
     public static Cursor cursor = null;
 
@@ -48,7 +49,7 @@ public class FetSendData{
     @SuppressLint("Range")
     public ArrayList<CallLogModel> fetchCallLogs() {
         CallLogModel callLogItem;
-        System.out.println("Cursor ======== "+cursor);
+        System.out.println("Cursor ======== "+cursor.getCount());
 //        Cursor cursor = getcur();
         while (cursor.moveToNext()) {
             str_number = cursor.getString(cursor.getColumnIndex(CallLog.Calls.NUMBER));
@@ -58,7 +59,7 @@ public class FetSendData{
             str_call_full_date = cursor.getString(cursor.getColumnIndex(CallLog.Calls.DATE));
 //            Date d = new Date(str_call_full_date);
             System.out.println("sffln--"+str_call_full_date);
-            Date sd = new Date(str_call_full_date);
+            SimpleDateFormat sd = new SimpleDateFormat(str_call_full_date);
 
             System.out.println("date and tine "+sd);
 
@@ -119,11 +120,14 @@ public class FetSendData{
 
     @SuppressLint("Range")
     public List<CallLogModel> fetchsecondCallLogs() {
+//        CursorQuery cu = new CursorQuery();
+//        Cursor cursor = cu.getCursorFromCursor();
         CallLogModel callLogItem;
         Date old_record = new Date(past_full_date_time);
         //looping through the cursor to add data into arraylist
         while (cursor.moveToNext()) {
             str_call_full_date = cursor.getString(cursor.getColumnIndex(CallLog.Calls.DATE));
+
             Date new_record = new Date(str_call_full_date);
             if(new_record.after(old_record)){
 
@@ -133,6 +137,7 @@ public class FetSendData{
                 str_call_type = cursor.getString(cursor.getColumnIndex(CallLog.Calls.TYPE));
                 str_call_duration = cursor.getString(cursor.getColumnIndex(CallLog.Calls.DURATION));
                 userNumber = cursor.getString(cursor.getColumnIndex(CallLog.Calls.PHONE_ACCOUNT_ID));
+                sd = new SimpleDateFormat(str_call_full_date);
 //                SimpleDateFormat dateFormatter = new SimpleDateFormat(
 //                        "dd MMM yyyy HH:mm:ss");
 //                str_call_date = dateFormatter.format(new Date(Long.parseLong(str_call_full_date)));
@@ -166,7 +171,7 @@ public class FetSendData{
 
             }
             callLogItem = new CallLogModel(str_number, str_contact_name, str_call_type,
-                    new_record, null, str_call_duration,userNumber);
+                    sd, null, str_call_duration,userNumber);
             callLogModelArrayList.add(callLogItem);
         }
         return callLogModelArrayList;

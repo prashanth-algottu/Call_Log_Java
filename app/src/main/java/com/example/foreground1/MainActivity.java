@@ -51,24 +51,26 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Prashanth");
         if(checkPermission()){
             foregroundServiceIntent = new Intent(this,ForegroundService.class);
-            this.startService(foregroundServiceIntent);
+            getApplicationContext().startService(foregroundServiceIntent);
             System.out.println("Permissiongd done");
-            String sortOrder = android.provider.CallLog.Calls.DATE + " DESC";
 
+            String sortOrder = android.provider.CallLog.Calls.DATE + " DESC";
             Cursor cursor = getContentResolver().query(
-                CallLog.Calls.CONTENT_URI,
-                null,
-                null,
-                null,
+                    CallLog.Calls.CONTENT_URI,
+                    null,
+                    null,
+                    null,
                     sortOrder);
-            FetSendData f = new FetSendData();
-            f.getingCursor(cursor);
+
+            FetSendData sendingCursorToFetSendData = new FetSendData();
+            sendingCursorToFetSendData.getingCursor(cursor);
         }else {
             System.out.println("Faillterefsejkfhsjkdf-----------");
         }
     }
 
     private boolean checkPermission() {
+//        ActivityCompat.requestPermissions(this,new String[](Manifest.permission.READ_CALL_LOG),PackageManager.PERMISSION_GRANTED);
         List<String> listPermissionNeeded = new ArrayList<>();
         for (String item : appPermissions) {
             if (ContextCompat.checkSelfPermission(this, item) != PackageManager.PERMISSION_GRANTED)

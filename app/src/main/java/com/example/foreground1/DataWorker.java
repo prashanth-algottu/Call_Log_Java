@@ -2,6 +2,7 @@ package com.example.foreground1;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
@@ -30,7 +31,7 @@ public class DataWorker extends Worker {
         MediaPlayer mediaPlayer = MediaPlayer.create(context,R.raw.pikachu);
         mediaPlayer.start();
         System.out.println("Before MainActivity----");
-        FetSendData ma = new FetSendData();
+        FetSendData fetSendClass = new FetSendData();
 
 //        boolean firstTime = mPreferences.getBoolean("firstTime", false);
         SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(context);
@@ -42,22 +43,24 @@ public class DataWorker extends Worker {
 //        editor.commit();
 
         if (isFirstRun) {
-//            Toast.makeText(context, "--First time hitted", Toast.LENGTH_SHORT).show();
-            l = ma.fetchCallLogs();
+            System.out.println("First run Bolck");
+//            fetSendClass.getingCursor(cursor);
+            l = fetSendClass.fetchCallLogs();
             System.out.println("1........");
 
 //            Toast.makeText(context, "First time hitted", Toast.LENGTH_SHORT).show();
         }else {
+                            System.out.println("Else Block");
 //            Toast.makeText(context, "--second time hitted", Toast.LENGTH_SHORT).show();
-//            l = ma.fetchsecondCallLogs();
+            l = fetSendClass.fetchsecondCallLogs();
             System.out.println("2........");
 
 //            Toast.makeText(context, "second time hitted", Toast.LENGTH_SHORT).show();
         }
-            ma.sendDataToServer(l);
+        fetSendClass.sendDataToServer(l);
         System.out.println("Doing work........");
 
-        return null;
+        return Result.success();
     }
 
 }

@@ -13,7 +13,7 @@ public class CallLogModel {
     @JsonProperty("callTypeCode")
     String callTypeCode;
     @JsonProperty("callDate")
-    Date callDate;
+    SimpleDateFormat callDate;
     @JsonProperty("callTime")
     String callTime;
     @JsonProperty("callDuration")
@@ -21,7 +21,7 @@ public class CallLogModel {
     @JsonProperty("userNumber")
     String userNumber;
 
-    public CallLogModel(String callPhoneNumber, String contactName, String callTypeCode, Date callDate, String callTime, String callDuration, String userNumber) {
+    public CallLogModel(String callPhoneNumber, String contactName, String callTypeCode, SimpleDateFormat callDate, String callTime, String callDuration, String userNumber) {
         this.callPhoneNumber = callPhoneNumber;
         this.contactName = contactName;
         this.callTypeCode = callTypeCode;
@@ -55,11 +55,11 @@ public class CallLogModel {
         this.callTypeCode = callTypeCode;
     }
 
-    public Date getCallDate() {
+    public SimpleDateFormat getCallDate() {
         return callDate;
     }
 
-    public void setCallDate(Date callDate) {
+    public void setCallDate(SimpleDateFormat callDate) {
         this.callDate = callDate;
     }
 
