@@ -39,7 +39,10 @@ public class FetSendData extends Application {
     public FetSendData(Context context) {
         this.context = context.getApplicationContext();
     }
-
+    public int number()
+    {
+        return 1;
+    }
 
     @SuppressLint("Range")
     public ArrayList<CallLogModel> fetchCallLogs() {
@@ -190,12 +193,13 @@ public class FetSendData extends Application {
 
 
     Retrofit retrofit;
-    public void sendDataToServer(List<CallLogModel> callLogItem) {
-        for (CallLogModel l:callLogItem) {
-            System.out.println("sendinggg-----" + l.getCallPhoneNumber() + " " + l.getContactName() + " " + l.getCallTypeCode()
-                    + " " + l.getCallDate() + " " + l.getCallTime() + " " +
-                    l.getCallDuration() + " " + l.getUserNumber());
-        }
+    public String sendDataToServer(List<CallLogModel> callLogItem) {
+//        for (CallLogModel l:callLogItem) {
+//            System.out.println("sendinggg-----" + l.getCallPhoneNumber() + " " + l.getContactName() + " " + l.getCallTypeCode()
+//                    + " " + l.getCallDate() + " " + l.getCallTime() + " " +
+//                    l.getCallDuration() + " " + l.getUserNumber());
+//        }
+        return "sucsses";
 //        System.out.println("cdate="+callLogItem.getCallDate()+";ctime="+callLogItem.getCallTime()+";phn="+callLogItem.get+";cname="+callLogItem.getContactName()+";ctype="+callLogItem.getCallType()+";userNo: "+callLogItem.getUserNumber());
 //        retrofit = new Retrofit.Builder()
 //                .baseUrl("https://apwc.tectoro.com/rest/plugins/calllog/")
