@@ -54,16 +54,6 @@ public class MainActivity extends AppCompatActivity {
             getApplicationContext().startService(foregroundServiceIntent);
             System.out.println("Permissiongd done");
 
-            String sortOrder = android.provider.CallLog.Calls.DATE + " DESC";
-            Cursor cursor = getContentResolver().query(
-                    CallLog.Calls.CONTENT_URI,
-                    null,
-                    null,
-                    null,
-                    sortOrder);
-
-            FetSendData sendingCursorToFetSendData = new FetSendData();
-            sendingCursorToFetSendData.getingCursor(cursor);
         }else {
             System.out.println("Faillterefsejkfhsjkdf-----------");
         }

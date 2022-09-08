@@ -30,35 +30,39 @@ public class DataWorker extends Worker {
         Context context = getApplicationContext();
         MediaPlayer mediaPlayer = MediaPlayer.create(context,R.raw.pikachu);
         mediaPlayer.start();
-        System.out.println("Before MainActivity----");
-        FetSendData fetSendClass = new FetSendData();
-
-//        boolean firstTime = mPreferences.getBoolean("firstTime", false);
-        SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean isFirstRun = wmbPreference.getBoolean("FIRSTRUN", true);
-
-
-//        SharedPreferences.Editor editor = mPreferences.edit();
-//        editor.putBoolean("firstTime", true);
-//        editor.commit();
-
-        if (isFirstRun) {
-            System.out.println("First run Bolck");
-//            fetSendClass.getingCursor(cursor);
+        try{
+            FetSendData fetSendClass = new FetSendData(context);
             l = fetSendClass.fetchCallLogs();
-            System.out.println("1........");
-
-//            Toast.makeText(context, "First time hitted", Toast.LENGTH_SHORT).show();
-        }else {
-                            System.out.println("Else Block");
-//            Toast.makeText(context, "--second time hitted", Toast.LENGTH_SHORT).show();
-            l = fetSendClass.fetchsecondCallLogs();
-            System.out.println("2........");
-
-//            Toast.makeText(context, "second time hitted", Toast.LENGTH_SHORT).show();
+            fetSendClass.sendDataToServer(l);
+        }catch (Exception e){
+            System.out.println("Catch block...........");
+            Result.retry();
         }
-        fetSendClass.sendDataToServer(l);
-        System.out.println("Doing work........");
+////        boolean firstTime = mPreferences.getBoolean("firstTime", false);
+//        SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(context);
+//        boolean isFirstRun = wmbPreference.getBoolean("FIRSTRUN", true);
+//
+//
+////        SharedPreferences.Editor editor = mPreferences.edit();
+////        editor.putBoolean("firstTime", true);
+////        editor.commit();
+//
+//        if (isFirstRun) {
+//            System.out.println("First run Bolck");
+////            fetSendClass.getingCursor(cursor);
+//            l = fetSendClass.fetchCallLogs();
+//            System.out.println("1........");
+//
+////            Toast.makeText(context, "First time hitted", Toast.LENGTH_SHORT).show();
+//        }else {
+//                            System.out.println("Else Block");
+////            Toast.makeText(context, "--second time hitted", Toast.LENGTH_SHORT).show();
+//            l = fetSendClass.fetchsecondCallLogs();
+//            System.out.println("2........");
+//
+////            Toast.makeText(context, "second time hitted", Toast.LENGTH_SHORT).show();
+//        }
+
 
         return Result.success();
     }

@@ -1,6 +1,8 @@
 package com.example.foreground1;
 
 import android.annotation.SuppressLint;
+import android.app.Application;
+import android.content.Context;
 import android.database.Cursor;
 import android.provider.CallLog;
 import android.util.Log;
@@ -19,7 +21,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class FetSendData{
+public class FetSendData extends Application {
     String past_full_date_time;
     private ArrayList<CallLogModel> callLogModelArrayList = new ArrayList<>();
     public static String userNumber;
@@ -32,23 +34,25 @@ public class FetSendData{
     public String str_call_time_formatted;
     public String str_call_duration;
     public SimpleDateFormat sd;
+    Context context;
 
-    public static Cursor cursor = null;
-
-    public FetSendData() {
-
+    public FetSendData(Context context) {
+        this.context = context.getApplicationContext();
     }
 
-    public void getingCursor(Cursor cursore){
-    this.cursor = cursore;
-    System.out.println("Coming cuee " +cursore);
-    System.out.println("assaingbjkna " +cursor);
-//    return cursore;
 
-    }
     @SuppressLint("Range")
     public ArrayList<CallLogModel> fetchCallLogs() {
         CallLogModel callLogItem;
+
+        String sortOrder = android.provider.CallLog.Calls.DATE + " DESC";
+        Cursor cursor = context.getContentResolver().query(
+                CallLog.Calls.CONTENT_URI,
+                null,
+                null,
+                null,
+                sortOrder);
+
         System.out.println("Cursor ======== "+cursor.getCount());
 //        Cursor cursor = getcur();
         while (cursor.moveToNext()) {
@@ -120,6 +124,13 @@ public class FetSendData{
 
     @SuppressLint("Range")
     public List<CallLogModel> fetchsecondCallLogs() {
+        String sortOrder = android.provider.CallLog.Calls.DATE + " DESC";
+        Cursor cursor = getContentResolver().query(
+                CallLog.Calls.CONTENT_URI,
+                null,
+                null,
+                null,
+                sortOrder);
 //        CursorQuery cu = new CursorQuery();
 //        Cursor cursor = cu.getCursorFromCursor();
         CallLogModel callLogItem;
