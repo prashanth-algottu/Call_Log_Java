@@ -14,19 +14,16 @@ public class CallLogModel {
     String callTypeCode;
     @JsonProperty("callDate")
     Date callDate;
-    @JsonProperty("callTime")
-    String callTime;
     @JsonProperty("callDuration")
     String callDuration;
     @JsonProperty("userNumber")
     String userNumber;
 
-    public CallLogModel(String callPhoneNumber, String contactName, String callTypeCode, Date callDate, String callTime, String callDuration, String userNumber) {
+    public CallLogModel(String callPhoneNumber, String contactName, String callTypeCode, Date callDate, String callDuration, String userNumber) {
         this.callPhoneNumber = callPhoneNumber;
         this.contactName = contactName;
         this.callTypeCode = callTypeCode;
         this.callDate = callDate;
-        this.callTime = callTime;
         this.callDuration = callDuration;
         this.userNumber = userNumber;
     }
@@ -63,13 +60,9 @@ public class CallLogModel {
         this.callDate = callDate;
     }
 
-    public String getCallTime() {
-        return callTime;
-    }
 
-    public void setCallTime(String callTime) {
-        this.callTime = callTime;
-    }
+
+
 
     public String getCallDuration() {
         return callDuration;

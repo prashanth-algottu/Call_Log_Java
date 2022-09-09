@@ -31,9 +31,6 @@ public class ForegroundService extends Service {
     private Context context;
     private final int NOTIFICATION_ID=1;
     private final String CHANNEL_ID="100";
-    private boolean isDestroyed = false;
-    Notification notification;
-
     public ForegroundService() {
 
     }
@@ -44,7 +41,6 @@ public class ForegroundService extends Service {
         context = this;
         startForeground(NOTIFICATION_ID,showNotification("This context"));
     }
-
     private Notification showNotification(String this_i_context) {
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
             ((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(
@@ -63,7 +59,7 @@ public class ForegroundService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(context, "Starting service....", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(context, "Starting service....", Toast.LENGTH_SHORT).show();
         Constraints constraints = new Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .setRequiresBatteryNotLow(true)
@@ -81,8 +77,6 @@ public class ForegroundService extends Service {
         workManager.enqueue(periodicSendDataWork);
         return super.onStartCommand(intent, flags, startId);
     }
-
-
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {

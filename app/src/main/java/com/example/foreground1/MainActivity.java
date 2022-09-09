@@ -1,5 +1,6 @@
 package com.example.foreground1;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -10,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.CallLog;
 import android.util.Log;
@@ -30,20 +32,15 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
+    private int flag = 0;
 
     private static final int PERMISSIONS_REQUEST_CODE = 999;
     Intent foregroundServiceIntent;
-//    private ArrayList<CallLogModel> callLogModelArrayList;
-//    public static String userNumber;
-//    public String str_number, str_contact_name, str_call_type, str_call_full_date,
-//            str_call_date, str_call_time, str_call_time_formatted, str_call_duration;
     String[] appPermissions = {
             Manifest.permission.READ_CALL_LOG,
             Manifest.permission.PROCESS_OUTGOING_CALLS,
             Manifest.permission.READ_PHONE_STATE
     };
-//    String past_full_date_time;
-//    -----------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,16 +48,33 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Prashanth");
         if(checkPermission()){
             foregroundServiceIntent = new Intent(this,ForegroundService.class);
-            getApplicationContext().startService(foregroundServiceIntent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                getApplicationContext().startForegroundService(foregroundServiceIntent);
+            }
             System.out.println("Permissiongd done");
+        }
+    }
 
-        }else {
-            System.out.println("Faillterefsejkfhsjkdf-----------");
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == PERMISSIONS_REQUEST_CODE){
+            for(int i=0;i < permissions.length; i++){
+                if(grantResults[i] == PackageManager.PERMISSION_DENIED){
+                    flag = 1;
+                    break;
+                }
+            }
+            if(flag ==0){
+                foregroundServiceIntent = new Intent(this,ForegroundService.class);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    getApplicationContext().startForegroundService(foregroundServiceIntent);
+                }
+            }
         }
     }
 
     private boolean checkPermission() {
-//        ActivityCompat.requestPermissions(this,new String[](Manifest.permission.READ_CALL_LOG),PackageManager.PERMISSION_GRANTED);
         List<String> listPermissionNeeded = new ArrayList<>();
         for (String item : appPermissions) {
             if (ContextCompat.checkSelfPermission(this, item) != PackageManager.PERMISSION_GRANTED)
