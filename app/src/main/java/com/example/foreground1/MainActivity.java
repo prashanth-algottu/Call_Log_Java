@@ -51,8 +51,7 @@ public class MainActivity extends AppCompatActivity {
             }
             System.out.println("Permissiongd done");
         }
-        // App hiding code
-        onPause();
+        
     }
 
     @Override
