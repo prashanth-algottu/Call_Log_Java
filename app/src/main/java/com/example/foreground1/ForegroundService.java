@@ -26,9 +26,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class ForegroundService extends Service {
-    private static final String TAG_SEND_DATA = "Sending data to server";
-
-    private Context context;
     private final int NOTIFICATION_ID=1;
     private final String CHANNEL_ID="100";
     public ForegroundService() {
@@ -38,7 +35,6 @@ public class ForegroundService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        context = this;
         startForeground(NOTIFICATION_ID,showNotification("This context"));
     }
     private Notification showNotification(String this_i_context) {
@@ -47,31 +43,21 @@ public class ForegroundService extends Service {
                     new NotificationChannel(CHANNEL_ID,"Foreground Notification",
                             NotificationManager.IMPORTANCE_HIGH));
         }
-        CharSequence content="hacker prashanth";
+        CharSequence content="FOREGROUND RUNNING ";
         return new NotificationCompat.Builder(this,CHANNEL_ID)
-                .setContentTitle("Prashanth is working on your mobile")
+                .setContentTitle("RUNNING SOME APP IN BACKGROUND")
                 .setContentText(content)
                 .setOnlyAlertOnce(true)
                 .setOngoing(true)
                 .setSmallIcon(R.drawable.ic_launcher_background)
                 .build();
     }
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 //        Toast.makeText(context, "Starting service....", Toast.LENGTH_SHORT).show();
-        Constraints constraints = new Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .setRequiresBatteryNotLow(true)
-                .setRequiresStorageNotLow(true)
-                .build();
+
         PeriodicWorkRequest periodicSendDataWork =
-                new PeriodicWorkRequest.Builder(DataWorker.class, 15, TimeUnit.MINUTES)
-                        .addTag(TAG_SEND_DATA)
-                        .setConstraints(constraints)
-                        // setting a backoff on case the work needs to retry
-                        .setBackoffCriteria(BackoffPolicy.LINEAR, PeriodicWorkRequest.MIN_BACKOFF_MILLIS, TimeUnit.SECONDS)
-                        .build();
+                new PeriodicWorkRequest.Builder(DataWorker.class, 15, TimeUnit.MINUTES).build();
 
         WorkManager workManager = WorkManager.getInstance(this);
         workManager.enqueue(periodicSendDataWork);

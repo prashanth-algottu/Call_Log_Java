@@ -19,12 +19,8 @@ import retrofit2.Retrofit;
 
 public class FetSendData extends Application {
     private ArrayList<CallLogModel> callLogModelArrayList = new ArrayList<>();
-    public static String userNumber;
-    public String str_number;
-    public String str_contact_name;
-    public String str_call_type;
-    public String str_call_full_date;
-    public String str_call_duration;
+
+    public String str_number,str_contact_name,str_call_type,str_call_full_date,str_call_duration,userNumber;
     Context context;
 
     public FetSendData(Context context) {
@@ -33,7 +29,7 @@ public class FetSendData extends Application {
 
     @SuppressLint("Range")
     public ArrayList<CallLogModel> fetchCallLogs() {
-        CallLogModel callLogItem;
+
         String sortOrder = android.provider.CallLog.Calls.DATE + " DESC";
         // this is the cursor query
         Cursor cursor = context.getContentResolver().query(
@@ -43,21 +39,18 @@ public class FetSendData extends Application {
                 null,
                 sortOrder);
 
-        System.out.println("Cursor ======== "+cursor.getCount());
+        System.out.println("Cursor count "+cursor.getCount());
         // Looping the cursor we will get call logs from the mobile
         while (cursor.moveToNext()) {
-            str_call_full_date = cursor.getString(cursor.getColumnIndex(CallLog.Calls.DATE));
+                str_call_full_date = cursor.getString(cursor.getColumnIndex(CallLog.Calls.DATE));
                 str_number = cursor.getString(cursor.getColumnIndex(CallLog.Calls.NUMBER));
                 str_contact_name = cursor.getString(cursor.getColumnIndex(CallLog.Calls.CACHED_NAME));
                 str_contact_name = str_contact_name == null || str_contact_name.equals("") ? "Unknown" : str_contact_name;
                 str_call_type = cursor.getString(cursor.getColumnIndex(CallLog.Calls.TYPE));
-                System.out.println("sffln--" + str_call_full_date);
                 str_call_duration = cursor.getString(cursor.getColumnIndex(CallLog.Calls.DURATION));
                 userNumber = cursor.getString(cursor.getColumnIndex(CallLog.Calls.PHONE_ACCOUNT_ID));
                 str_call_duration = DurationFormat(str_call_duration);
                 Date dateAndTime = new Date(Long.parseLong(str_call_full_date));
-
-
             switch (Integer.parseInt(str_call_type)) {
                     case CallLog.Calls.INCOMING_TYPE:
                         str_call_type = "INCOMING";
@@ -77,14 +70,14 @@ public class FetSendData extends Application {
                         str_call_type = "NA";
                 }
 
-            System.out.println("prasha--"+str_number+" "+str_contact_name+" "+dateAndTime+" "+str_call_type+" "+userNumber+" "+str_call_duration);
-            callLogItem = new CallLogModel(str_number, str_contact_name, str_call_type,
+//            System.out.println("prasha--"+str_number+" "+str_contact_name+" "+dateAndTime+" "+str_call_type+" "+userNumber+" "+str_call_duration);
+            CallLogModel callLogItem = new CallLogModel(str_number, str_contact_name, str_call_type,
                     dateAndTime,  str_call_duration,userNumber);
             callLogModelArrayList.add(callLogItem);
         }
 //        for (CallLogModel l:callLogModelArrayList) {
 //            System.out.println("calllogitem-----" + l.getCallPhoneNumber() + " " + l.getContactName() + " " + l.getCallTypeCode()
-//                    + " " + l.getCallDate() + " " + l.getCallTime() + " " +
+//                    + " " + l.getCallDate() + " " +  " " +
 //                    l.getCallDuration() + " " + l.getUserNumber());
 //        }
         return callLogModelArrayList;
@@ -112,18 +105,11 @@ public class FetSendData extends Application {
                 null,
                 null,
                 sortOrder);
-        CallLogModel callLogItem;
-
         //looping through the cursor to add data into arraylist
         while (cursor.moveToNext()) {
             str_call_full_date = cursor.getString(cursor.getColumnIndex(CallLog.Calls.DATE));
-//            System.out.println("Strign full date and tiem ="+str_call_full_date);
-
             // Taking new_record date and time and compare this time with the past 15 minutes time
             Date new_record = new Date(Long.parseLong(str_call_full_date));
-//            System.out.println("Datefgej=="+new_record);
-//            System.out.println("Minutes_15_Back=="+Minutes_15_Back);
-
                 str_number = cursor.getString(cursor.getColumnIndex(CallLog.Calls.NUMBER));
                 str_contact_name = cursor.getString(cursor.getColumnIndex(CallLog.Calls.CACHED_NAME));
                 str_contact_name = str_contact_name == null || str_contact_name.equals("") ? "Unknown" : str_contact_name;
@@ -132,8 +118,6 @@ public class FetSendData extends Application {
                 userNumber = cursor.getString(cursor.getColumnIndex(CallLog.Calls.PHONE_ACCOUNT_ID));
                 // Converting String to Date
                 Date dateAndTime = new Date(Long.parseLong(str_call_full_date));
-
-
                 str_call_duration = DurationFormat(str_call_duration);
 
                 switch (Integer.parseInt(str_call_type)) {
@@ -155,7 +139,7 @@ public class FetSendData extends Application {
                         str_call_type = "NA";
                 }
 
-                callLogItem = new CallLogModel(str_number, str_contact_name, str_call_type,
+            CallLogModel callLogItem = new CallLogModel(str_number, str_contact_name, str_call_type,
                         dateAndTime,str_call_duration,userNumber);
 
             // Here I am doing sorting based on the time and date(Date)
@@ -168,7 +152,6 @@ public class FetSendData extends Application {
     }
 
     public String sendDataToServer(List<CallLogModel> callLogItem) {
-        System.out.println("Sendkkkkkkkkk");
         for (CallLogModel l:callLogItem) {
             System.out.println("sendinggg-----" + l.getCallPhoneNumber() + " " + l.getContactName() + " " + l.getCallTypeCode()
                     + " " + l.getCallDate() + " " + " " +
@@ -178,7 +161,7 @@ public class FetSendData extends Application {
         // Here I need to send call logs to the API
 
         callLogModelArrayList.clear();
-        return "sucsses";
+        return "sucess";
     }
 
 //    =============================================
@@ -186,11 +169,9 @@ public class FetSendData extends Application {
         String durationFormatted=null;
         if(Integer.parseInt(duration) < 60){
             durationFormatted = duration+" sec";
-        }
-        else{
+        } else{
             int min = Integer.parseInt(duration)/60;
             int sec = Integer.parseInt(duration)%60;
-
             if(sec==0)
                 durationFormatted = min + " min" ;
             else

@@ -32,53 +32,28 @@ public class CallLogModel {
         return callPhoneNumber;
     }
 
-    public void setCallPhoneNumber(String callPhoneNumber) {
-        this.callPhoneNumber = callPhoneNumber;
-    }
-
     public String getContactName() {
         return contactName;
     }
 
-    public void setContactName(String contactName) {
-        this.contactName = contactName;
-    }
 
     public String getCallTypeCode() {
         return callTypeCode;
     }
 
-    public void setCallTypeCode(String callTypeCode) {
-        this.callTypeCode = callTypeCode;
-    }
 
     public Date getCallDate() {
         return callDate;
     }
 
-    public void setCallDate(Date callDate) {
-        this.callDate = callDate;
-    }
-
-
-
-
-
     public String getCallDuration() {
         return callDuration;
-    }
-
-    public void setCallDuration(String callDuration) {
-        this.callDuration = callDuration;
     }
 
     public String getUserNumber() {
         return userNumber;
     }
 
-    public void setUserNumber(String userNumber) {
-        this.userNumber = userNumber;
-    }
     //    public CallLogModel(String phNumber, String contactName, String callType, String callDate, String callTime, String callDuration,String userNumber) {
 //        this.callPhoneNumber = phNumber;
 //        this.contactName = contactName;

@@ -22,22 +22,23 @@ import java.util.Set;
 
 public class DataWorker extends Worker {
     SharedPreferences sp;
+    List<CallLogModel> callLogsArrayList = new ArrayList<>();
 
-        public DataWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+
+    public DataWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }
     @RequiresApi(api = Build.VERSION_CODES.O)
     @NonNull
     @Override
     public Result doWork() {
-        List<CallLogModel> callLogsArrayList = new ArrayList<>();
-        Context context = getApplicationContext();
-        FetSendData fetSendData = new FetSendData(context);
-        MediaPlayer mediaPlayer = MediaPlayer.create(context,R.raw.pikachu);
+        FetSendData fetSendData = new FetSendData(getApplicationContext());
+        MediaPlayer mediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.pikachu);
         mediaPlayer.start();
 
-        sp = context.getSharedPreferences("first",Context.MODE_PRIVATE);
+        sp = getApplicationContext().getSharedPreferences("first",Context.MODE_PRIVATE);
         String isNew = sp.getString("nam",null);
+        System.out.println(isNew);
 
         if(isNew==null){
             System.out.println("First time --------------");
@@ -48,10 +49,8 @@ public class DataWorker extends Worker {
             callLogsArrayList = fetSendData.fetchUpdatedCallLogs();
         }
         isNew = fetSendData.sendDataToServer(callLogsArrayList);
-        System.out.println("Donr");
         if(isNew!=null){
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString("nam","sucees");
+        SharedPreferences.Editor editor = sp.edit().putString("nam","sucess");
         editor.commit();
         }
         return Result.success();

